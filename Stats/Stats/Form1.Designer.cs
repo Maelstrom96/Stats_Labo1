@@ -41,7 +41,7 @@
             this.RB_Different = new System.Windows.Forms.RadioButton();
             this.RB_Fixe = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.TXB_SaveFile = new System.Windows.Forms.TextBox();
             this.CB_Copy = new System.Windows.Forms.CheckBox();
             this.BTN_Save = new System.Windows.Forms.Button();
             this.TXB_SavePath = new System.Windows.Forms.TextBox();
@@ -183,12 +183,12 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Nom de l\'enregistrement";
             // 
-            // textBox2
+            // TXB_SaveFile
             // 
-            this.textBox2.Location = new System.Drawing.Point(139, 195);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 8;
+            this.TXB_SaveFile.Location = new System.Drawing.Point(139, 195);
+            this.TXB_SaveFile.Name = "TXB_SaveFile";
+            this.TXB_SaveFile.Size = new System.Drawing.Size(100, 20);
+            this.TXB_SaveFile.TabIndex = 8;
             // 
             // CB_Copy
             // 
@@ -237,7 +237,7 @@
             this.Controls.Add(this.BTN_Start);
             this.Controls.Add(this.BTN_Save);
             this.Controls.Add(this.CB_Copy);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.TXB_SaveFile);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.GB_Taille);
             this.Controls.Add(this.NUD_Nbechantillon);
@@ -273,7 +273,7 @@
         private System.Windows.Forms.RadioButton RB_Fixe;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox TXB_SaveFile;
         private System.Windows.Forms.CheckBox CB_Copy;
         private System.Windows.Forms.Button BTN_Save;
         private System.Windows.Forms.TextBox TXB_SavePath;

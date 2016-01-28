@@ -8,16 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Excel = Microsoft.Office.Interop.Excel;
+
 
 namespace Stats
 {
     public partial class Main : Form
     {
 
-        private String originalPath;
-        private String savePath;
-        private String saveFile;
-
+        private String _originalFile;
+        private String _savePath;
+        private String _saveFile;
 
         public Main()
         {
@@ -32,7 +33,7 @@ namespace Stats
             if(of.ShowDialog() == DialogResult.OK)
             {
                 TXB_OpenPath.Text = of.FileName;
-                originalPath = of.FileName;
+                _originalFile = of.FileName;
             }
         }
 
@@ -44,16 +45,28 @@ namespace Stats
             if (result == DialogResult.OK)
             {
                 TXB_SavePath.Text = fbd.SelectedPath;
+                _savePath = fbd.SelectedPath;
             }
         }
 
         private void BTN_Start_Click(object sender, EventArgs e)
         {
-            OpenFile(originalPath);
+            _saveFile = TXB_SaveFile.Text;
+            OpenFile(_originalFile);
         }
 
-        private void OpenFile(String oriPath)
+        private void OpenFile(String oriFile)
         {
+            Excel.Application xlApp;
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            Excel.Range range;
+
+            xlApp = new Excel.Application();
+            xlWorkBook = xlApp.Workbooks.Open(_originalFile, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            range = xlWorkSheet.UsedRange;
+            //http://csharp.net-informations.com/excel/csharp-read-excel.htm
 
         }
 
