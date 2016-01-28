@@ -31,20 +31,21 @@
             this.BTN_Open = new System.Windows.Forms.Button();
             this.TXB_OpenPath = new System.Windows.Forms.TextBox();
             this.GB_Type = new System.Windows.Forms.GroupBox();
-            this.RB_Simple = new System.Windows.Forms.RadioButton();
             this.RB_Syst = new System.Windows.Forms.RadioButton();
+            this.RB_Simple = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.NUD_Nbechantillon = new System.Windows.Forms.NumericUpDown();
             this.GB_Taille = new System.Windows.Forms.GroupBox();
-            this.RB_Fixe = new System.Windows.Forms.RadioButton();
-            this.RB_Different = new System.Windows.Forms.RadioButton();
-            this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.RB_Different = new System.Windows.Forms.RadioButton();
+            this.RB_Fixe = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.CB_Copy = new System.Windows.Forms.CheckBox();
             this.BTN_Save = new System.Windows.Forms.Button();
             this.TXB_SavePath = new System.Windows.Forms.TextBox();
+            this.BTN_Start = new System.Windows.Forms.Button();
             this.GB_Type.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUD_Nbechantillon)).BeginInit();
             this.GB_Taille.SuspendLayout();
@@ -79,17 +80,6 @@
             this.GB_Type.TabStop = false;
             this.GB_Type.Text = "Type échantillon";
             // 
-            // RB_Simple
-            // 
-            this.RB_Simple.AutoSize = true;
-            this.RB_Simple.Location = new System.Drawing.Point(7, 20);
-            this.RB_Simple.Name = "RB_Simple";
-            this.RB_Simple.Size = new System.Drawing.Size(56, 17);
-            this.RB_Simple.TabIndex = 0;
-            this.RB_Simple.TabStop = true;
-            this.RB_Simple.Text = "Simple";
-            this.RB_Simple.UseVisualStyleBackColor = true;
-            // 
             // RB_Syst
             // 
             this.RB_Syst.AutoSize = true;
@@ -100,6 +90,17 @@
             this.RB_Syst.TabStop = true;
             this.RB_Syst.Text = "Systematique";
             this.RB_Syst.UseVisualStyleBackColor = true;
+            // 
+            // RB_Simple
+            // 
+            this.RB_Simple.AutoSize = true;
+            this.RB_Simple.Location = new System.Drawing.Point(7, 20);
+            this.RB_Simple.Name = "RB_Simple";
+            this.RB_Simple.Size = new System.Drawing.Size(56, 17);
+            this.RB_Simple.TabIndex = 0;
+            this.RB_Simple.TabStop = true;
+            this.RB_Simple.Text = "Simple";
+            this.RB_Simple.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -135,16 +136,21 @@
             this.GB_Taille.TabStop = false;
             this.GB_Taille.Text = "Taille";
             // 
-            // RB_Fixe
+            // textBox1
             // 
-            this.RB_Fixe.AutoSize = true;
-            this.RB_Fixe.Location = new System.Drawing.Point(7, 20);
-            this.RB_Fixe.Name = "RB_Fixe";
-            this.RB_Fixe.Size = new System.Drawing.Size(44, 17);
-            this.RB_Fixe.TabIndex = 0;
-            this.RB_Fixe.TabStop = true;
-            this.RB_Fixe.Text = "Fixe";
-            this.RB_Fixe.UseVisualStyleBackColor = true;
+            this.textBox1.Location = new System.Drawing.Point(48, 57);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 4;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 60);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Taille";
             // 
             // RB_Different
             // 
@@ -157,21 +163,16 @@
             this.RB_Different.Text = "Différente";
             this.RB_Different.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // RB_Fixe
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 60);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Taille";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(48, 57);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 4;
+            this.RB_Fixe.AutoSize = true;
+            this.RB_Fixe.Location = new System.Drawing.Point(7, 20);
+            this.RB_Fixe.Name = "RB_Fixe";
+            this.RB_Fixe.Size = new System.Drawing.Size(44, 17);
+            this.RB_Fixe.TabIndex = 0;
+            this.RB_Fixe.TabStop = true;
+            this.RB_Fixe.Text = "Fixe";
+            this.RB_Fixe.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -208,6 +209,7 @@
             this.BTN_Save.TabIndex = 10;
             this.BTN_Save.Text = "Enregistrer";
             this.BTN_Save.UseVisualStyleBackColor = true;
+            this.BTN_Save.Click += new System.EventHandler(this.BTN_Save_Click);
             // 
             // TXB_SavePath
             // 
@@ -217,11 +219,22 @@
             this.TXB_SavePath.Size = new System.Drawing.Size(323, 20);
             this.TXB_SavePath.TabIndex = 1;
             // 
+            // BTN_Start
+            // 
+            this.BTN_Start.Location = new System.Drawing.Point(13, 292);
+            this.BTN_Start.Name = "BTN_Start";
+            this.BTN_Start.Size = new System.Drawing.Size(75, 23);
+            this.BTN_Start.TabIndex = 11;
+            this.BTN_Start.Text = "Démarrer";
+            this.BTN_Start.UseVisualStyleBackColor = true;
+            this.BTN_Start.Click += new System.EventHandler(this.BTN_Start_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 472);
+            this.Controls.Add(this.BTN_Start);
             this.Controls.Add(this.BTN_Save);
             this.Controls.Add(this.CB_Copy);
             this.Controls.Add(this.textBox2);
@@ -264,6 +277,7 @@
         private System.Windows.Forms.CheckBox CB_Copy;
         private System.Windows.Forms.Button BTN_Save;
         private System.Windows.Forms.TextBox TXB_SavePath;
+        private System.Windows.Forms.Button BTN_Start;
     }
 }
 
