@@ -24,11 +24,13 @@ namespace Stats
         //Excel.Application xlApp;
         //Excel.Workbook xlWorkBook;
         //Excel.Worksheet xlWorkSheet;
+        
         Excel.Range range;
         Excel.Application xlApp = new Excel.Application();
         Excel.Workbook xlWorkBook;
         Excel.Worksheet xlWorkSheet;
         object misValue = System.Reflection.Missing.Value;
+        
         
         
         public Main()
@@ -92,30 +94,19 @@ namespace Stats
                 }
             }
             SaveFile();
-
-            //xlWorkBook.Close(true, null, null);
-            //xlApp.Quit();
-
-            //releaseObject(xlWorkSheet);
-            //releaseObject(xlWorkBook);
-            //releaseObject(xlApp);
         }
 
         public void WriteFile(int rCnt, int cCnt, String str)
         {
-            
             xlWorkSheet.Cells[rCnt, cCnt] = str;
-
-            //xlWorkBook.SaveAs(_savePath + @"\" + _saveFile, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            //xlWorkBook.Close(true, misValue, misValue);
-            //xlApp.Quit();
-
         }
 
         public void SaveFile()
         {
-            xlWorkBook.SaveAs(_savePath + @"\" + _saveFile + ".xlsx",misValue , misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            xlWorkBook.Close(true, misValue, misValue);
+            xlWorkBook = xlApp.Workbooks.Add(misValue);
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            xlWorkBook.SaveAs("d:\\csharp-Excel.xls", Excel.XlFileFormat.xlWorkbookDefault);//, misValue, misValue, false, false, Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlUserResolution, true, misValue, misValue, misValue);
+            xlWorkBook.Close(true, "d:\\csharp-Excel.xls", misValue);
             xlApp.Quit();
 
             releaseObject(xlWorkSheet);
