@@ -20,9 +20,25 @@ namespace Stats
         private String _savePath;
         private String _saveFile;
 
+        
+        //Excel.Application xlApp;
+        //Excel.Workbook xlWorkBook;
+        //Excel.Worksheet xlWorkSheet;
+        Excel.Range range;
+        Excel.Application xlApp = new Excel.Application();
+        Excel.Workbook xlWorkBook;
+        Excel.Worksheet xlWorkSheet;
+        object misValue = System.Reflection.Missing.Value;
+        
+        
         public Main()
         {
             InitializeComponent();
+            if (xlApp == null)
+            {
+                MessageBox.Show("Excel is not properly installed!!");
+                return;
+            }
         }
 
         //Ouverture du fichier et ecriture de l'endroit où le fichier est enregistrer dans la text box suivante.
@@ -57,21 +73,16 @@ namespace Stats
 
         private void OpenFile(String oriFile)
         {
-            Excel.Application xlApp;
-            Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
-            Excel.Range range;
-
             string str;
             int rCnt = 0;
             int cCnt = 0;
 
-            xlApp = new Excel.Application();
             xlWorkBook = xlApp.Workbooks.Open(oriFile, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
             xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 
             range = xlWorkSheet.UsedRange;
-
+            xlWorkBook = xlApp.Workbooks.Add(misValue);
+            //xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
             for (rCnt = 1; rCnt <= range.Rows.Count; rCnt++)
             {
                 for (cCnt = 1; cCnt <= range.Columns.Count; cCnt++)
@@ -80,35 +91,30 @@ namespace Stats
                     WriteFile(rCnt, cCnt, str);
                 }
             }
+            SaveFile();
 
-            xlWorkBook.Close(true, null, null);
-            xlApp.Quit();
+            //xlWorkBook.Close(true, null, null);
+            //xlApp.Quit();
 
-            releaseObject(xlWorkSheet);
-            releaseObject(xlWorkBook);
-            releaseObject(xlApp);
+            //releaseObject(xlWorkSheet);
+            //releaseObject(xlWorkBook);
+            //releaseObject(xlApp);
         }
 
         public void WriteFile(int rCnt, int cCnt, String str)
         {
-            Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
-
-            if (xlApp == null)
-            {
-                MessageBox.Show("Excel is not properly installed!!");
-                return;
-            }
-
-
-            Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
-            object misValue = System.Reflection.Missing.Value;
-
-            xlWorkBook = xlApp.Workbooks.Add(misValue);
-            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            
             xlWorkSheet.Cells[rCnt, cCnt] = str;
 
-            xlWorkBook.SaveAs(_savePath + @"\" + _saveFile, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            //xlWorkBook.SaveAs(_savePath + @"\" + _saveFile, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            //xlWorkBook.Close(true, misValue, misValue);
+            //xlApp.Quit();
+
+        }
+
+        public void SaveFile()
+        {
+            xlWorkBook.SaveAs(_savePath + @"\" + _saveFile + ".xlsx",misValue , misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
 
