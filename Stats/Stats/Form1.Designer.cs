@@ -36,7 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.NUD_Nbechantillon = new System.Windows.Forms.NumericUpDown();
             this.GB_Taille = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TXB_Taille = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.RB_Different = new System.Windows.Forms.RadioButton();
             this.RB_Fixe = new System.Windows.Forms.RadioButton();
@@ -125,7 +125,7 @@
             // 
             // GB_Taille
             // 
-            this.GB_Taille.Controls.Add(this.textBox1);
+            this.GB_Taille.Controls.Add(this.TXB_Taille);
             this.GB_Taille.Controls.Add(this.label2);
             this.GB_Taille.Controls.Add(this.RB_Different);
             this.GB_Taille.Controls.Add(this.RB_Fixe);
@@ -136,12 +136,12 @@
             this.GB_Taille.TabStop = false;
             this.GB_Taille.Text = "Taille";
             // 
-            // textBox1
+            // TXB_Taille
             // 
-            this.textBox1.Location = new System.Drawing.Point(48, 57);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 4;
+            this.TXB_Taille.Location = new System.Drawing.Point(48, 57);
+            this.TXB_Taille.Name = "TXB_Taille";
+            this.TXB_Taille.Size = new System.Drawing.Size(100, 20);
+            this.TXB_Taille.TabIndex = 4;
             // 
             // label2
             // 
@@ -233,7 +233,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 472);
+            this.ClientSize = new System.Drawing.Size(441, 327);
             this.Controls.Add(this.BTN_Start);
             this.Controls.Add(this.BTN_Save);
             this.Controls.Add(this.CB_Copy);
@@ -246,6 +246,8 @@
             this.Controls.Add(this.TXB_SavePath);
             this.Controls.Add(this.TXB_OpenPath);
             this.Controls.Add(this.BTN_Open);
+            this.MaximumSize = new System.Drawing.Size(457, 366);
+            this.MinimumSize = new System.Drawing.Size(457, 366);
             this.Name = "Main";
             this.Text = "Statistiques";
             this.GB_Type.ResumeLayout(false);
@@ -271,7 +273,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RadioButton RB_Different;
         private System.Windows.Forms.RadioButton RB_Fixe;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox TXB_Taille;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox TXB_SaveFile;
         private System.Windows.Forms.CheckBox CB_Copy;
