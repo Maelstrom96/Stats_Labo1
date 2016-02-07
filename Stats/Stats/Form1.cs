@@ -53,8 +53,8 @@ namespace Stats
             of.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
             if(of.ShowDialog() == DialogResult.OK)
             {
-                TXB_OpenPath.Text = of.FileName;
-                _originalFile = of.FileName;
+                TXB_OpenPath.Text = of.FileName;    //Endroit du fichier source dans la text box
+                _originalFile = of.FileName;    //Endroit du fichier de sauvegarde
             }
         }
 
@@ -65,16 +65,16 @@ namespace Stats
             DialogResult result = fbd.ShowDialog();
             if (result == DialogResult.OK)
             {
-                TXB_SavePath.Text = fbd.SelectedPath;
-                _savePath = fbd.SelectedPath;
+                TXB_SavePath.Text = fbd.SelectedPath;   //Endroit de sauvegarde afficher dans la text box
+                _savePath = fbd.SelectedPath;   //Endroit de sauvegarde
             }
         }
 
         private void BTN_Start_Click(object sender, EventArgs e)
         {
-            _saveFile = TXB_SaveFile.Text;
-            nbTaille = int.Parse(TXB_Taille.Text.ToString());
-            nbFiles = int.Parse(NUD_Nbechantillon.Value.ToString());
+            _saveFile = TXB_SaveFile.Text;  //Nom du fichier a enregistrer
+            nbTaille = int.Parse(TXB_Taille.Text.ToString());   //Taile de l'echantillonage
+            nbFiles = int.Parse(NUD_Nbechantillon.Value.ToString());    //Nombre de fichiers a creer
             OpenFile(_originalFile);
             this.Close();
         }
@@ -110,6 +110,7 @@ namespace Stats
                     //BLOC DE RANDOM POUR LECHANTILLON SIMPLE
                     //Simple = random rows sans remise
                     //Systematique = 1-4-7-10 ...
+                    //Pour l'instant cest un random ben basic ****************A MODIFIER **********************************
                     for (rCnt = 2; rCnt <= nbTaille + 1; rCnt++)
                     {
                         Random random = new Random();
@@ -141,6 +142,7 @@ namespace Stats
                 SaveFile(i);
             }
 
+            //Release de l'application et du fichier d'origine
             xlWorkBook.Close(true, oriFile, misValue);
             xlApp.Quit();
             releaseObject(xlWorkSheet);
@@ -158,9 +160,11 @@ namespace Stats
         //Enregistrement du/des nouveau(x) fichier(s)
         public void SaveFile(int i)
         {
+            //Enregistrement du nouveau fichier
             xlWorkBookSave.SaveAs(_savePath + @"\" + _saveFile + " - " + i + " - " + nbTaille, Excel.XlFileFormat.xlWorkbookDefault);
             xlWorkBookSave.Close(true, _savePath + @"\" + _saveFile + " - " + i + " - " + nbTaille, misValue);
             
+            //Release du nouveau fichier
             releaseObject(xlWorkSheetSave);
             releaseObject(xlWorkBookSave);
         }
