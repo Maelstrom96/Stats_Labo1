@@ -8,8 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
-
 
 namespace Stats
 {
@@ -57,16 +55,6 @@ namespace Stats
 
         private void OpenFile(String oriFile)
         {
-            Excel.Application xlApp;
-            Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
-            Excel.Range range;
-
-            xlApp = new Excel.Application();
-            xlWorkBook = xlApp.Workbooks.Open(_originalFile, 0, true, 5, "", "", true, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
-            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-            range = xlWorkSheet.UsedRange;
-            //http://csharp.net-informations.com/excel/csharp-read-excel.htm
 
         }
 

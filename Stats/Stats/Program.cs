@@ -16,7 +16,20 @@ namespace Stats
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            Run();
+            //Application.Run(new Main());
+        }
+
+        static void Run()
+        {
+            try
+            {
+                Excel file = new Excel();
+            }
+            catch (Exception e)
+            {
+                //TODO
+            }
         }
     }
 }
