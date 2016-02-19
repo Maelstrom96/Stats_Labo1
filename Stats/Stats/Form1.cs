@@ -19,43 +19,115 @@ namespace Stats
 {
     public partial class Main : Form
     {
-
-        private String _originalFile;
-        private String _savePath;
-        private String _saveFile;
-        private int nbTaille;
-        private int nbFiles;
-
-        Excel.Range range;
         Excel.Application xlApp = new Excel.Application();
-        Excel.Workbook xlWorkBook;
-        Excel.Worksheet xlWorkSheet;
-        Excel.Workbook xlWorkBookSave;
-        Excel.Worksheet xlWorkSheetSave;
-        object misValue = System.Reflection.Missing.Value;
-        
-        
-        
+        List<List<string>> Data;
+        List<string> Header = new List<string>();
+
         public Main()
         {
             InitializeComponent();
+            Init();
             if (xlApp == null)
             {
-                MessageBox.Show("Excel is not properly installed!!");
+                MessageBox.Show("Excel n'est pas installé!! Fermeture.");
                 return;
             }
         }
 
-        //Ouverture du fichier et ecriture de l'endroit où le fichier est enregistrer dans la text box suivante.
-        private void BTN_Open_Click(object sender, EventArgs e)
+        public static void IncrementProgress()
         {
-            OpenFileDialog of = new OpenFileDialog();
-            of.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
-            if(of.ShowDialog() == DialogResult.OK)
+            
+        }
+
+        private void Init()
+        {
+            RB_Different.Enabled = false;
+            RB_Fixe.Enabled = false;
+            RB_Simple.Enabled = false;
+            RB_Syst.Enabled = false;
+            NUD_Nbechantillon.Enabled = false;
+            TXB_SaveFile.Enabled = false;
+            TXB_SavePath.Enabled = false;
+            num_Taille.Enabled = false;
+            CB_Copy.Enabled = false;
+            BTN_Save.Enabled = false;
+            BTN_Start.Enabled = false;
+            num_TailleMax.Visible = false;
+            num_TailleMin.Visible = false;
+        }
+
+        //Ouverture du fichier et ecriture de l'endroit où le fichier est enregistrer dans la text box suivante.
+        public void BTN_Open_Click(object sender, EventArgs e)
+        {
+            try
             {
-                TXB_OpenPath.Text = of.FileName;    //Endroit du fichier source dans la text box
-                _originalFile = of.FileName;    //Endroit du fichier de sauvegarde
+                TXB_OpenPath.Text = Utils.GetFilePath();
+
+                // Enable button
+                RB_Simple.Enabled = true;
+                RB_Syst.Enabled = true;
             }
+            catch (Exception ex)
+            {
+                switch (ex.Message)
+                {
+                    case "CANCELED":
+                        TXB_OpenPath.Text = "";
+                        Init();
+                        break;
+                    default:
+                        MessageBox.Show(ex.Message);
+                        break;
+                }
+            }
+        }
+
+        private void RB_Click(object sender, EventArgs e)
+        {
+            if (sender == RB_Simple)
+            {
+
+
+                // Enable next buttons
+                RB_Different.Enabled = true;
+                RB_Fixe.Enabled = true;
+            }
+            if (sender == RB_Syst)
+            {
+
+
+                // Enable next buttons
+                RB_Different.Enabled = true;
+                RB_Fixe.Enabled = true;
+            }
+            if (sender == RB_Fixe)
+            {
+                MinMaxVisible(false);
+                num_Taille.Enabled = true;
+                NUD_Nbechantillon.Enabled = true;
+                CB_Copy.Enabled = true;
+                BTN_Save.Enabled = true;
+                TXB_SaveFile.Enabled = true;
+            }
+            if (sender == RB_Different)
+            {
+                MinMaxVisible();
+                NUD_Nbechantillon.Enabled = true;
+                CB_Copy.Enabled = true;
+                BTN_Save.Enabled = true;
+                TXB_SaveFile.Enabled = true;
+            }
+        }
+
+        private void MinMaxVisible(bool Visible = true)
+        {
+            lb_Max.Visible = Visible;
+            lb_Min.Visible = Visible;
+            num_TailleMax.Visible = Visible;
+            num_TailleMin.Visible = Visible;
+
+            lb_Taille.Visible = !Visible;
+            num_Taille.Visible = !Visible;
         }
 
         //Ouverture de l'endroit pour sauvegarder le/les fichiers a l'endroit specifié.
@@ -66,22 +138,110 @@ namespace Stats
             if (result == DialogResult.OK)
             {
                 TXB_SavePath.Text = fbd.SelectedPath;   //Endroit de sauvegarde afficher dans la text box
-                _savePath = fbd.SelectedPath;   //Endroit de sauvegarde
+                BTN_Start.Enabled = true;
+            }
+            else
+            {
+                TXB_SavePath.Text = string.Empty;
+                BTN_Start.Enabled = false;
             }
         }
 
         private void BTN_Start_Click(object sender, EventArgs e)
         {
+            try
+            {
+                // Exceptions 
+                if (NUD_Nbechantillon.Value < 1) throw new Exception("La nombre d'échantillon est invalide.");
+                if (num_TailleMax.Value <= num_TailleMin.Value && RB_Different.Checked) throw new Exception("La taille minimal ne peut dépasser la taille maximal.");
+                if (TXB_SaveFile.Text.Trim().Equals(String.Empty)) throw new Exception("Le nom du fichier ne peut être nul.");
+
+                Cursor.Current = Cursors.WaitCursor;
+
+                Data = Utils.ReadPopulation(xlApp, TXB_OpenPath.Text, Header);
+                Random rnd = new Random();
+
+                if (RB_Simple.Checked)
+                {
+                    if (RB_Fixe.Checked)
+                    {
+                        for (int i = 1; i <= NUD_Nbechantillon.Value; i++)
+                        {
+                            List<List<string>> echantillon = Utils.GetEchantillonAleatoire(Data, (int)num_Taille.Value);
+                            string NomFichier = TXB_SaveFile.Text;
+
+                            if (NUD_Nbechantillon.Value > 1) NomFichier += "-" + i;
+
+                            if (CB_Copy.Checked) Utils.WriteEchantillon(xlApp, NomFichier, TXB_SavePath.Text, Header, echantillon, Data);
+                            else Utils.WriteEchantillon(xlApp, NomFichier, TXB_SavePath.Text, Header, echantillon, null);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 1; i <= NUD_Nbechantillon.Value; i++)
+                        {
+                            List<List<string>> echantillon = Utils.GetEchantillonAleatoire(Data, rnd.Next((int)num_TailleMin.Value, (int)num_TailleMax.Value));
+                            string NomFichier = TXB_SaveFile.Text;
+
+                            if (NUD_Nbechantillon.Value > 1) NomFichier += "-" + i;
+
+                            if (CB_Copy.Checked) Utils.WriteEchantillon(xlApp, NomFichier, TXB_SavePath.Text, Header, echantillon, Data);
+                            else Utils.WriteEchantillon(xlApp, NomFichier, TXB_SavePath.Text, Header, echantillon, null);
+                        }
+                    }
+                }
+                else
+                {
+                    if (RB_Fixe.Checked)
+                    {
+                        for (int i = 1; i <= NUD_Nbechantillon.Value; i++)
+                        {
+                            List<List<string>> echantillon = Utils.GetEchantillonSystematique(Data, (int)num_Taille.Value);
+                            string NomFichier = TXB_SaveFile.Text;
+
+                            if (NUD_Nbechantillon.Value > 1) NomFichier += "-" + i;
+
+                            if (CB_Copy.Checked) Utils.WriteEchantillon(xlApp, NomFichier, TXB_SavePath.Text, Header, echantillon, Data);
+                            else Utils.WriteEchantillon(xlApp, NomFichier, TXB_SavePath.Text, Header, echantillon, null);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 1; i <= NUD_Nbechantillon.Value; i++)
+                        {
+                            List<List<string>> echantillon = Utils.GetEchantillonSystematique(Data, rnd.Next((int)num_TailleMin.Value, (int)num_TailleMax.Value));
+                            string NomFichier = TXB_SaveFile.Text;
+
+                            if (NUD_Nbechantillon.Value > 1) NomFichier += "-" + i;
+
+                            if (CB_Copy.Checked) Utils.WriteEchantillon(xlApp, NomFichier, TXB_SavePath.Text, Header, echantillon, Data);
+                            else Utils.WriteEchantillon(xlApp, NomFichier, TXB_SavePath.Text, Header, echantillon, null);
+                        }
+                    }
+                }
+
+                Cursor.Current = Cursors.Default;
+
+                MessageBox.Show("Opération terminée.");
+            } 
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            /*
             _saveFile = TXB_SaveFile.Text;  //Nom du fichier a enregistrer
             nbTaille = int.Parse(TXB_Taille.Text.ToString());   //Taile de l'echantillonage
             nbFiles = int.Parse(NUD_Nbechantillon.Value.ToString());    //Nombre de fichiers a creer
             OpenFile(_originalFile);
             this.Close();
+             */
         }
 
         //Ouverture du fichier original et d'un nouveau fichier pour l'ecriture
         private void OpenFile(String oriFile)
         {
+            /*
             string str;
             int rCnt = 0;
             int cCnt = 0;
@@ -149,17 +309,19 @@ namespace Stats
             releaseObject(xlWorkBook);
             releaseObject(xlApp);
             MessageBox.Show("Fichier enregistré à " + _savePath + @"\" + _saveFile);
+            */
         }
 
         //Ecriture dans le nouveau fichier
         public void WriteFile(int rCnt, int cCnt, String str)
         {
-            xlWorkSheetSave.Cells[rCnt, cCnt] = str;
+            //xlWorkSheetSave.Cells[rCnt, cCnt] = str;
         }
 
         //Enregistrement du/des nouveau(x) fichier(s)
         public void SaveFile(int i)
         {
+            /*
             //Enregistrement du nouveau fichier
             xlWorkBookSave.SaveAs(_savePath + @"\" + _saveFile + " - " + i + " - " + nbTaille, Excel.XlFileFormat.xlWorkbookDefault);
             xlWorkBookSave.Close(true, _savePath + @"\" + _saveFile + " - " + i + " - " + nbTaille, misValue);
@@ -167,6 +329,7 @@ namespace Stats
             //Release du nouveau fichier
             releaseObject(xlWorkSheetSave);
             releaseObject(xlWorkBookSave);
+            */
         }
 
 
@@ -186,11 +349,22 @@ namespace Stats
             {
                 GC.Collect();
             }
+        }
+
+        private void NUD_Nbechantillon_ValueChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void lb_Min_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lb_Max_Click(object sender, EventArgs e)
+        {
+
         } 
-
-
-        
-
     }
 }
 
